@@ -27,8 +27,9 @@ from random import randrange
 from gc import get_objects
 
 PAGESIZE = 4096 # 4 KB
+CHAR_BIT = 8
 WORD_SIZE = 8
-SIZE_MAX = 1 << 8*WORD_SIZE
+SIZE_MAX = 1 << CHAR_BIT*WORD_SIZE
 
 def memset(dest, ch, count):
     """
