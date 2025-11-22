@@ -21,15 +21,7 @@ SEE ALSO
 
     memset(3), strlen(3)
 """
-
-from math import ceil
-from random import randrange
-from gc import get_objects
-
-PAGESIZE = 4096 # 4 KB
-CHAR_BIT = 8
-WORD_SIZE = 8
-SIZE_MAX = 1 << CHAR_BIT*WORD_SIZE
+from . import _core
 
 def memset(dest, ch, count):
     """
@@ -39,16 +31,16 @@ def memset(dest, ch, count):
     exceeds the capacity of dest, assumes the next page does not have
     write permissions.
     """
-    count = size_t(count)
+    count = _core.size_t(count)
     for i in range(min(count, len(dest))):
         dest[i] = ch
     if count > len(dest):
-        garbage_size = _written_garbage_count(len(dest), count)
+        garbage_size = _core.written_garbage_count(len(dest), count)
         garbage = [ch] * garbage_size
-        _write_garbage(dest, garbage)
+        _core.write_garbage(dest, garbage)
 
-        if count >= _page_end(len(dest)):
-            raise SegmentationFault()
+        if count >= _core.page_end(len(dest)):
+            raise _core.SegmentationFault()
     return dest
 
 def strlen(s):
@@ -60,82 +52,10 @@ def strlen(s):
     """
     index = s.find('\0')
     if index >= 0:
-        return size_t(index)
-    until = _page_end(len(s))
+        return _core.size_t(index)
+    until = _core.page_end(len(s))
     for i in range(len(s), until):
-        garbage = randrange(256)
+        garbage = _core.garbage_uchar()
         if garbage == 0:
-            return size_t(i)
-    raise SegmentationFault()
-
-def size_t(n):
-    return int(n) % SIZE_MAX
-
-def _page_end(addr):
-    return ceil(addr / PAGESIZE) * PAGESIZE
-
-def _written_garbage_count(dest_size, write_size):
-    assert write_size > dest_size
-    page_end = _page_end(dest_size)
-    return min(page_end, write_size) - dest_size
-
-def _write_garbage(dest, data):
-    dest += data
-
-    objs = [o for o in get_objects() if isinstance(o, (list, dict, bytearray))]
-    while len(data) > 0:
-        i = randrange(len(objs))
-        obj = objs[i]
-        objs.pop(i)
-        written = _overwrite_obj(obj, data)
-        data = data[written:]
-
-def _overwrite_obj(obj, data):
-    if isinstance(obj, (list, bytearray)):
-        n = min(len(obj), len(data))
-        for i in range(n):
-            obj[i] = data[i]
-        return n
-    elif isinstance(obj, dict):
-        keys = list(obj.keys())
-        n = min(len(keys), len(data) // 2)
-        for i in range(n):
-            old_key = keys[i]
-            new_key = str(data[2*i])
-            val = data[2*i + 1]
-            del obj[old_key]
-            obj[new_key] = val
-        if len(data) % 2 != 0:
-            new_key = str(data[-1])
-            if n == len(keys):
-                obj[new_key] = _garbage_whatever()
-            else:
-                old_key = keys[n]
-                val = obj[old_key]
-                obj[new_key] = val
-                del obj[old_key]
-        return len(data)
-
-
-def _garbage_whatever():
-    typ = randrange(2)
-    if typ == 0:
-        return _garbage_int()
-    elif typ == 1:
-        return _garbage_key()
-
-def _garbage_key():
-    out = ""
-    for i in range(WORD_SIZE):
-        out += _garbage_char()
-    return out
-
-def _garbage_char():
-    return chr(randrange(256))
-
-def _garbage_int():
-    return randrange(1 << SIZE_MAX)
-
-class SegmentationFault(Exception):
-    def __init__(self, message="(core dumped)"):
-        super().__init__(message)
+            return _core.size_t(i)
+    raise _core.SegmentationFault()
