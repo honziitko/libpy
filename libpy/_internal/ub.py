@@ -1,15 +1,8 @@
 from math import ceil
 from random import randrange
 from gc import get_objects
-from . import config
-
-PAGESIZE = 4096 # 4 KB
-CHAR_BIT = 8
-WORD_SIZE = 8
-SIZE_MAX = 1 << CHAR_BIT*WORD_SIZE
-
-def size_t(n):
-    return int(n) % SIZE_MAX
+from .. import config
+from .stddef import PAGESIZE, WORD_SIZE, SIZE_MAX
 
 def page_end(offset, addr):
     out = ceil(offset / PAGESIZE) * PAGESIZE
@@ -79,6 +72,4 @@ def garbage_uchar():
 def garbage_int():
     return randrange(1 << SIZE_MAX)
 
-class SegmentationFault(Exception):
-    def _init__(self, message="(core dumped)"):
-        super().__init__(message)
+
