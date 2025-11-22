@@ -19,8 +19,9 @@ SEE ALSO
 
     iso646_h(7)
 """
-
 _Bool = bool
 true = True
 false = False
 __bool_true_false_are_defined = true
+
+__all__ = [name for name in globals() if not (name.startswith("__") and name.endswith("__"))]
