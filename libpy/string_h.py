@@ -21,6 +21,7 @@ SEE ALSO
 
     memset(3), strlen(3)
 """
+from ._intrdef import *
 from . import _core
 
 def memset(dest, ch, count):
@@ -59,3 +60,5 @@ def strlen(s):
         if garbage == 0:
             return _core.size_t(i)
     raise _core.SegmentationFault()
+
+__all__ = [name for name in globals() if not (name.startswith("__") and name.endswith("__")) and name != "_core"]

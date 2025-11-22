@@ -1,3 +1,4 @@
+from ._intrdef import *
 from . import config
 from ._core import SegmentationFault
 

@@ -19,7 +19,8 @@ SEE ALSO
 
     iso646_h(7)
 """
-_Bool = bool
+from ._intrdef import *
+
 true = True
 false = False
 __bool_true_false_are_defined = true
