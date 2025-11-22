@@ -20,6 +20,9 @@ SEE ALSO
     iso646_h(7)
 """
 from ._intrdef import *
+from . import _internal
+
+assert _internal.versions.check(_internal.versions.C99, None), "stdbool_h.py requires Python 2.2 to be included"
 
 true = True
 false = False
