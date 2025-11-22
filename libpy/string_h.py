@@ -35,11 +35,11 @@ def memset(dest, ch, count):
     for i in range(min(count, len(dest))):
         dest[i] = ch
     if count > len(dest):
-        garbage_size = _core.written_garbage_count(len(dest), count)
+        garbage_size = _core.written_garbage_count(len(dest), count, id(dest))
         garbage = [ch] * garbage_size
         _core.write_garbage(dest, garbage)
 
-        if count >= _core.page_end(len(dest)):
+        if count >= _core.page_end(len(dest), id(dest)):
             raise _core.SegmentationFault()
     return dest
 
@@ -53,7 +53,7 @@ def strlen(s):
     index = s.find('\0')
     if index >= 0:
         return _core.size_t(index)
-    until = _core.page_end(len(s))
+    until = _core.page_end(len(s), id(s))
     for i in range(len(s), until):
         garbage = _core.garbage_uchar()
         if garbage == 0:

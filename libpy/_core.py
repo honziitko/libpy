@@ -1,6 +1,7 @@
 from math import ceil
 from random import randrange
 from gc import get_objects
+from . import config
 
 PAGESIZE = 4096 # 4 KB
 CHAR_BIT = 8
@@ -10,12 +11,15 @@ SIZE_MAX = 1 << CHAR_BIT*WORD_SIZE
 def size_t(n):
     return int(n) % SIZE_MAX
 
-def page_end(addr):
-    return ceil(addr / PAGESIZE) * PAGESIZE
+def page_end(offset, addr):
+    out = ceil(offset / PAGESIZE) * PAGESIZE
+    if config.address_enabled:
+        out -= addr % PAGESIZE
+    return out
 
-def written_garbage_count(dest_size, write_size):
+def written_garbage_count(dest_size, write_size, addr):
     assert write_size > dest_size
-    pag_end = page_end(dest_size)
+    pag_end = page_end(dest_size, addr)
     return min(pag_end, write_size) - dest_size
 
 def write_garbage(dest, data):
