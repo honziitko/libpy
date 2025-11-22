@@ -1,4 +1,4 @@
-from libpy.string_h import memset
+from libpy.string_h import *
 
 for i in range(1_000):
     print(i)
