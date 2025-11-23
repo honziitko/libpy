@@ -1,14 +1,7 @@
-from math import ceil
 from random import randrange
 from gc import get_objects
-from .. import config
-from .stddef import PAGESIZE, WORD_SIZE, SIZE_MAX
-
-def page_end(offset, addr):
-    out = ceil(offset / PAGESIZE) * PAGESIZE
-    if config.address_enabled:
-        out -= addr % PAGESIZE
-    return out
+from .memory import page_end
+from .garbage_read import garbage_whatever
 
 def written_garbage_count(dest_size, write_size, addr):
     assert write_size > dest_size
@@ -52,24 +45,5 @@ def overwrite_obj(obj, data):
                 del obj[old_key]
         return len(data)
 
-
-def garbage_whatever():
-    typ = randrange(2)
-    if typ == 0:
-        return garbage_int()
-    elif typ == 1:
-        return garbage_key()
-
-def garbage_key():
-    out = ""
-    for i in range(WORD_SIZE):
-        out += chr(garbage_uchar())
-    return out
-
-def garbage_uchar():
-    return randrange(256)
-
-def garbage_int():
-    return randrange(1 << SIZE_MAX)
 
 
