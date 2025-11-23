@@ -34,14 +34,13 @@ def va_arg(ap, T):
     /*type*/ is not compatible with the value provided, the behaviour
     is undefined.
     """
-    if ap.valid:
-        if len(ap.data) == 0:
-            assert False, "TODO"
-        val = ap.data.pop(0)
-        assert type(val) == T, "TODO"
-        return T(val)
-    else:
-        assert False, "TODO"
+    if not ap.valid:
+        return _internal.garbage_deref_of(T)
+    if len(ap.data) == 0:
+        return _internal.garbage_of(T)
+    val = ap.data.pop(0)
+    assert type(val) == T, f"Mismatched types: expected {T}, got {type(val)}"
+    return T(val)
 
 def va_start(ap, arg):
     """

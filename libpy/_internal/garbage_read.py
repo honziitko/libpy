@@ -20,4 +20,27 @@ def garbage_uchar():
 def garbage_int():
     return randrange(1 << SIZE_MAX)
 
+def garbage_length():
+    out = 0
+    for i in range(4):
+        out += randrange(16)
+    return out
 
+def garbage_of(T):
+    if T == int:
+        return garbage_int()
+    elif T == str:
+        return garbage_key()
+    elif T == list:
+        n = garbage_length()
+        return [garbage_whatever() for i in range(n)]
+    elif T == bytearray:
+        n = garbage_length()
+        return bytearray([garbage_uchar() for i in range(n)])
+    else:
+        assert False, "Unsupported type"
+
+def garbage_deref_of(T):
+    if randrange(2) == 0:
+        raise SegmentationFault()
+    return garbage_of(T)
