@@ -40,7 +40,7 @@ def va_arg(ap, T):
         return _internal.garbage_of(T)
     val = ap.data.pop(0)
     assert type(val) == T, f"Mismatched types: expected {T}, got {type(val)}"
-    return T(val)
+    return val
 
 def va_start(ap, arg):
     """
