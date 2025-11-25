@@ -1,3 +1,4 @@
+#!/usr/bin/env -S PYTHONPATH=. python3
 from libpy.stdarg_h import *
 
 def foo(*args):
