@@ -21,8 +21,8 @@ SEE ALSO
 
     memset(3), strlen(3)
 """
-from ._intrdef import *
-from . import _internal
+from .intrdef import *
+from . import internal
 
 def memset(dest, ch, count):
     """
@@ -32,16 +32,16 @@ def memset(dest, ch, count):
     exceeds the capacity of dest, assumes the next page does not have
     write permissions.
     """
-    count = _internal.size_t(count)
+    count = internal.size_t(count)
     for i in range(min(count, len(dest))):
         dest[i] = ch
     if count > len(dest):
-        garbage_size = _internal.written_garbage_count(len(dest), count, id(dest))
+        garbage_size = internal.written_garbage_count(len(dest), count, id(dest))
         garbage = [ch] * garbage_size
-        _internal.write_garbage(dest, garbage)
+        internal.write_garbage(dest, garbage)
 
-        if count >= _internal.page_end(len(dest), id(dest)):
-            raise _internal.SegmentationFault()
+        if count >= internal.page_end(len(dest), id(dest)):
+            raise internal.SegmentationFault()
     return dest
 
 def strlen(s):
@@ -53,12 +53,12 @@ def strlen(s):
     """
     index = s.find('\0')
     if index >= 0:
-        return _internal.size_t(index)
-    until = _internal.page_end(len(s), id(s))
+        return internal.size_t(index)
+    until = internal.page_end(len(s), id(s))
     for i in range(len(s), until):
-        garbage = _internal.garbage_uchar()
+        garbage = internal.garbage_uchar()
         if garbage == 0:
-            return _internal.size_t(i)
-    raise _internal.SegmentationFault()
+            return internal.size_t(i)
+    raise internal.SegmentationFault()
 
-__all__ = [name for name in globals() if not (name.startswith("__") and name.endswith("__")) and name != "_internal"]
+__all__ = [name for name in globals() if not (name.startswith("__") and name.endswith("__")) and name != "internal"]

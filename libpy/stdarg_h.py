@@ -18,8 +18,8 @@ SEE ALSO
     va_list(7), va_copy(3), va_end(3), va_start(3)
 """
 
-from ._intrdef import *
-from . import _internal
+from .intrdef import *
+from . import internal
 
 class va_list:
     def __init__(self):
@@ -35,9 +35,9 @@ def va_arg(ap, T):
     is undefined.
     """
     if not ap.valid:
-        return _internal.garbage_deref_of(T)
+        return internal.garbage_deref_of(T)
     if len(ap.data) == 0:
-        return _internal.garbage_of(T)
+        return internal.garbage_of(T)
     val = ap.data.pop(0)
     assert type(val) == T, f"Mismatched types: expected {T}, got {type(val)}"
     return val
@@ -61,4 +61,4 @@ def va_end(ap):
     Frees a va_list.
     """
 
-__all__ = [name for name in globals() if not (name.startswith("__") and name.endswith("__")) and name != "_internal"]
+__all__ = [name for name in globals() if not (name.startswith("__") and name.endswith("__")) and name != "internal"]

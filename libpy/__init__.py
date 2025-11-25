@@ -1,6 +1,6 @@
-from ._intrdef import *
+from .intrdef import *
 from . import config
-from ._internal import SegmentationFault
+from .internal import SegmentationFault
 
 def set_address_enabled(flag):
     assert type(flag) == bool

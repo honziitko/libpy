@@ -19,13 +19,13 @@ SEE ALSO
 
     iso646_h(7)
 """
-from ._intrdef import *
-from . import _internal
+from .intrdef import *
+from . import internal
 
-assert _internal.versions.check(_internal.versions.C99, None), "stdbool_h.py requires Python 2.2 to be included"
+assert internal.versions.check(internal.versions.C99, None), "stdbool_h.py requires Python 2.2 to be included"
 
 true = True
 false = False
 __bool_true_false_are_defined = true
 
-__all__ = [name for name in globals() if not (name.startswith("__") and name.endswith("__")) and name != "_internal"]
+__all__ = [name for name in globals() if not (name.startswith("__") and name.endswith("__")) and name != "internal"]
