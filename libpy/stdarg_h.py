@@ -39,8 +39,7 @@ def va_arg(ap, T):
     if len(ap.data) == 0:
         return internal.garbage_of(T)
     val = ap.data.pop(0)
-    assert type(val) == T, f"Mismatched types: expected {T}, got {type(val)}"
-    return val
+    return internal.bitcast(val, T)
 
 def va_start(ap, arg):
     """
