@@ -18,7 +18,7 @@ def garbage_uchar():
     return randrange(256)
 
 def garbage_int():
-    return randrange(1 << SIZE_MAX)
+    return randrange(SIZE_MAX)
 
 def garbage_length():
     out = 0
