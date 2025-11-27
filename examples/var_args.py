@@ -15,5 +15,5 @@ def bar(*args):
         print(va_arg(ap, int))
     va_end(ap)
 
-foo("Hello", "World!", "HALT")
+foo("Hello", "World!", None)
 bar("Hello", "World!")

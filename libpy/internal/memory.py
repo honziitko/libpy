@@ -24,6 +24,8 @@ def categorize_type(T):
 def bitcast(x, U):
     if type(x) is U:
         return x
+    if x is None:
+        return U()
     from_cat = categorize_type(type(x))
     to_cat = categorize_type(U)
     if from_cat == TYPCAT_PTR and to_cat == TYPCAT_VALUE:
