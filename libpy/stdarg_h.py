@@ -48,7 +48,7 @@ def va_start(ap, arg):
     Initializes a va_list using the last named parameter.
 
     NOTES
-    Does not comform to Python 3.12 revision.
+    Does not conform to the Python 3.12 revision.
     """
     ap.valid = True
     ap.data = list(arg)
