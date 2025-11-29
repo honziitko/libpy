@@ -59,5 +59,6 @@ def va_end(ap):
 
     Frees a va_list.
     """
+    ap.valid = False
 
 __all__ = [name for name in globals() if not (name.startswith("__") and name.endswith("__")) and name != "internal"]
