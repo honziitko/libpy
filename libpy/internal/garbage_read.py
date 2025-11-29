@@ -2,11 +2,13 @@ from random import randrange
 from .stddef import *
 
 def garbage_whatever():
-    typ = randrange(2)
+    typ = randrange(3)
     if typ == 0:
         return garbage_int()
     elif typ == 1:
         return garbage_key()
+    elif typ == 2:
+        return garbage_bool()
 
 def garbage_key():
     out = ""
@@ -20,6 +22,9 @@ def garbage_uchar():
 def garbage_int():
     return randrange(SIZE_MAX)
 
+def garbage_bool():
+    return bool(randrange(256))
+
 def garbage_length():
     out = 0
     for i in range(4):
@@ -31,6 +36,8 @@ def garbage_of(T):
         return garbage_int()
     elif T == str:
         return garbage_key()
+    elif T == bool:
+        return garbage_bool()
     elif T == list:
         n = garbage_length()
         return [garbage_whatever() for i in range(n)]
